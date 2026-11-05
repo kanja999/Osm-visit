@@ -14,9 +14,12 @@ jobs:
       - name: Ekstrak proyek
         run: unzip -q MockLocationTester.zip
 
-      - name: Perbaiki user agent peta
+      - name: Perbaiki user agent dan cache peta
         run: |
-          sed -i 's|userAgentValue = packageName|userAgentValue = "MockLocationTester/1.0 (https://github.com/kanja999/Osm-visit)"|' MockLocationTester/app/src/main/java/com/example/mocklocation/MainActivity.kt
+          F=MockLocationTester/app/src/main/java/com/example/mocklocation/MainActivity.kt
+          sed -i 's|userAgentValue = packageName|userAgentValue = "MockLocationTester/1.0 (https://github.com/kanja999/Osm-visit)"; osmdroidBasePath = java.io.File(cacheDir, "osm_v2"); osmdroidTileCache = java.io.File(cacheDir, "osm_v2/tiles")|' $F
+          grep -q 'MockLocationTester/1.0' $F
+          sed -i 's|Ketuk peta untuk memilih titik|v2 - Ketuk peta untuk memilih titik|' MockLocationTester/app/src/main/res/values/strings.xml
 
       - uses: actions/setup-java@v4
         with:
