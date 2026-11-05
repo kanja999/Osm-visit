@@ -14,6 +14,10 @@ jobs:
       - name: Ekstrak proyek
         run: unzip -q MockLocationTester.zip
 
+      - name: Perbaiki user agent peta
+        run: |
+          sed -i 's|userAgentValue = packageName|userAgentValue = "MockLocationTester/1.0 (https://github.com/kanja999/Osm-visit)"|' MockLocationTester/app/src/main/java/com/example/mocklocation/MainActivity.kt
+
       - uses: actions/setup-java@v4
         with:
           distribution: temurin
