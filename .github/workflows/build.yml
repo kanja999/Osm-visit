@@ -14,12 +14,13 @@ jobs:
       - name: Ekstrak proyek
         run: unzip -q MockLocationTester.zip
 
-      - name: Perbaiki user agent dan cache peta
+      - name: Ganti sumber peta ke CARTO Voyager
         run: |
           F=MockLocationTester/app/src/main/java/com/example/mocklocation/MainActivity.kt
-          sed -i 's|userAgentValue = packageName|userAgentValue = "MockLocationTester/1.0 (https://github.com/kanja999/Osm-visit)"; osmdroidBasePath = java.io.File(cacheDir, "osm_v2"); osmdroidTileCache = java.io.File(cacheDir, "osm_v2/tiles")|' $F
-          grep -q 'MockLocationTester/1.0' $F
-          sed -i 's|Ketuk peta untuk memilih titik|v2 - Ketuk peta untuk memilih titik|' MockLocationTester/app/src/main/res/values/strings.xml
+          sed -i 's|userAgentValue = packageName|userAgentValue = "MockLocationTester/1.0 (https://github.com/kanja999/Osm-visit)"; osmdroidBasePath = java.io.File(cacheDir, "osm_v3"); osmdroidTileCache = java.io.File(cacheDir, "osm_v3/tiles")|' $F
+          sed -i 's|setTileSource(TileSourceFactory.MAPNIK)|setTileSource(org.osmdroid.tileprovider.tilesource.XYTileSource("CartoVoyager", 0, 19, 256, ".png", arrayOf("https://a.basemaps.cartocdn.com/rastertiles/voyager/", "https://b.basemaps.cartocdn.com/rastertiles/voyager/", "https://c.basemaps.cartocdn.com/rastertiles/voyager/"), "OpenStreetMap contributors, CARTO"))|' $F
+          grep -q CartoVoyager $F
+          sed -i 's|Ketuk peta untuk memilih titik|v3 - Ketuk peta untuk memilih titik|' MockLocationTester/app/src/main/res/values/strings.xml
 
       - uses: actions/setup-java@v4
         with:
